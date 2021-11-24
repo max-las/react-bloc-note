@@ -16,19 +16,23 @@ function NoteEditor(props) {
   let validId = true;
   let initText = "";
 
-  if(props.mode == "new"){
-    handleSave = () => {
+  if(props.mode === "new"){
+    handleSave = (event) => {
+      event.preventDefault();
+
       notes.push(text);
       localStorage.setItem("notes", JSON.stringify(notes));
       navigate("/");
     };
-  } else if(props.mode == "edit"){
+  } else if(props.mode === "edit"){
     validId = typeof notes[props.which] !== "undefined";
 
     if(validId){
       initText = notes[props.which];
 
-      handleSave = () => {
+      handleSave = (event) => {
+        event.preventDefault();
+
         notes[props.which] = text;
         localStorage.setItem("notes", JSON.stringify(notes));
         navigate("/");
@@ -51,8 +55,8 @@ function NoteEditor(props) {
       <div className="card">
         <textarea className="textarea" placeholder="À quoi pensez-vous ?" value={text} onChange={handleTextChange}></textarea>
         <footer className="card-footer">
-          <a onClick={handleSave} className="card-footer-item">Enregister</a>
-          <a onClick={handleCancel} className="card-footer-item">Annuler</a>
+          <a href="/" onClick={handleSave} className="card-footer-item">Enregister</a>
+          <a href="/" onClick={handleCancel} className="card-footer-item">Annuler</a>
         </footer>
       </div>
     );
