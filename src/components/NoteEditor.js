@@ -18,16 +18,26 @@ function NoteEditor(props) {
 
   if(typeof props.which === "undefined"){
     saveNote = () => {
-      notes.push(text);
+      let now = new Date();
+
+      let note = {
+        text: text,
+        created_at: now,
+        edited_at: now
+      }
+      notes.push(note);
     };
   } else {
     validId = typeof notes[props.which] !== "undefined";
 
     if(validId){
-      initText = notes[props.which];
+      initText = notes[props.which].text;
 
       saveNote = () => {
-        notes[props.which] = text;
+        let now = new Date();
+
+        notes[props.which].text = text;
+        notes[props.which].edited_at = now;
       };
     }
   }
