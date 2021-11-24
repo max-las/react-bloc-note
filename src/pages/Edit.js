@@ -8,7 +8,7 @@ function Edit(){
   return(
     <div className="container">
       <h1 className="title">Éditer une note</h1>
-      <NoteEditor mode="edit" which={id} />
+      <NoteEditor which={id} />
     </div>
   );
 }

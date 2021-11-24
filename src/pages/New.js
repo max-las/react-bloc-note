@@ -4,7 +4,7 @@ function New(){
   return(
     <div className="container">
       <h1 className="title">Nouvelle note</h1>
-      <NoteEditor mode="new"/>
+      <NoteEditor />
     </div>
   );
 }

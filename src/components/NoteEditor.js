@@ -16,7 +16,7 @@ function NoteEditor(props) {
   let validId = true;
   let initText = "";
 
-  if(props.mode === "new"){
+  if(typeof props.which === "undefined"){
     handleSave = (event) => {
       event.preventDefault();
 
@@ -24,7 +24,7 @@ function NoteEditor(props) {
       localStorage.setItem("notes", JSON.stringify(notes));
       navigate("/");
     };
-  } else if(props.mode === "edit"){
+  } else {
     validId = typeof notes[props.which] !== "undefined";
 
     if(validId){
