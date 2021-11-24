@@ -11,18 +11,14 @@ function NoteEditor(props) {
     notes = JSON.parse(notes);
   }
 
-  let handleSave = () => {};
-
   let validId = true;
   let initText = "";
 
-  if(typeof props.which === "undefined"){
-    handleSave = (event) => {
-      event.preventDefault();
+  let saveNote = () => {};
 
+  if(typeof props.which === "undefined"){
+    saveNote = () => {
       notes.push(text);
-      localStorage.setItem("notes", JSON.stringify(notes));
-      navigate("/");
     };
   } else {
     validId = typeof notes[props.which] !== "undefined";
@@ -30,17 +26,21 @@ function NoteEditor(props) {
     if(validId){
       initText = notes[props.which];
 
-      handleSave = (event) => {
-        event.preventDefault();
-
+      saveNote = () => {
         notes[props.which] = text;
-        localStorage.setItem("notes", JSON.stringify(notes));
-        navigate("/");
       };
     }
   }
 
   let [text, setText] = useState(initText);
+
+  const handleSave = (event) => {
+    event.preventDefault();
+
+    saveNote();
+    localStorage.setItem("notes", JSON.stringify(notes));
+    navigate("/");
+  }
 
   const handleCancel = () => {
     window.history.back();
