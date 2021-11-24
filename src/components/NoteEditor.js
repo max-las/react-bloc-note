@@ -42,7 +42,9 @@ function NoteEditor(props) {
     navigate("/");
   }
 
-  const handleCancel = () => {
+  const handleCancel = (event) => {
+    event.preventDefault();
+
     window.history.back();
   };
 
