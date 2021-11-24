@@ -1,6 +1,11 @@
+import NoteEditor from '../components/NoteEditor.js';
+
 function New(){
   return(
-    <p>New</p>
+    <div className="container">
+      <h1 className="title">Nouvelle note</h1>
+      <NoteEditor mode="new"/>
+    </div>
   );
 }
 
