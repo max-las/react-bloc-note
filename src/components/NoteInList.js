@@ -26,7 +26,7 @@ function NoteInList({note, id}) {
   return (
     <div className="box" onClick={() => {navigate("/edit/" + id)}}>
       <div className="block">
-        <p>{note.text}</p>
+        <p style={{"white-space": "pre-line"}}>{note.text}</p>
       </div>
       <div className="block content is-small">
         <p className="has-text-grey-light">{history}</p>
