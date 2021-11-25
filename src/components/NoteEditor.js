@@ -16,6 +16,14 @@ function NoteEditor(props) {
 
   let saveNote = () => {};
 
+  let deleteButton = null;
+
+  const deleteNote = () => {
+    notes.splice(props.which, 1);
+    localStorage.setItem("notes", JSON.stringify(notes));
+    navigate("/");
+  };
+
   if(typeof props.which === "undefined"){
     saveNote = () => {
       let now = new Date();
@@ -31,6 +39,8 @@ function NoteEditor(props) {
     validId = typeof notes[props.which] !== "undefined";
 
     if(validId){
+      deleteButton = <a href="/" onClick={deleteNote} className="card-footer-item">Supprimer</a>;
+
       initText = notes[props.which].text;
 
       saveNote = () => {
@@ -68,6 +78,7 @@ function NoteEditor(props) {
         <textarea className="textarea" placeholder="À quoi pensez-vous ?" value={text} onChange={handleTextChange}></textarea>
         <footer className="card-footer">
           <a href="/" onClick={handleSave} className="card-footer-item">Enregister</a>
+          {deleteButton}
           <a href="/" onClick={handleCancel} className="card-footer-item">Annuler</a>
         </footer>
       </div>
