@@ -1,23 +1,17 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "../db.js";
 
 import NoteInList from "../components/NoteInList.js";
 
 function Home() {
-  let initNotes;
-  let storedNotes = localStorage.getItem("notes");
-
-  if(storedNotes === null){
-    initNotes = [];
-  } else {
-    initNotes = JSON.parse(storedNotes);
-  }
-  let [notes, setNotes] = useState(initNotes);
+  const notes = useLiveQuery(
+    () => db.notes.toArray()
+  );
 
   const clearAll = () => {
-    localStorage.clear();
-    setNotes([]);
-    console.log("All clear.");
+    db.notes.clear();
   }
 
   return (
@@ -26,9 +20,9 @@ function Home() {
         Bloc-notes
       </h1>
 
-      {notes.map((note, i) => {
+      {notes?.map((note) => {
         return (
-          <NoteInList key={i} id={i} note={note} />
+          <NoteInList key={note.id} note={note} />
         );
       })}
 

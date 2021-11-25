@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function NoteInList({note, id}) {
+function NoteInList({note}) {
   let navigate = useNavigate();
   
   const formatDate = (dateStr) => {
@@ -24,9 +24,9 @@ function NoteInList({note, id}) {
   }
 
   return (
-    <div className="box" onClick={() => {navigate("/edit/" + id)}}>
+    <div className="box" onClick={() => {navigate("/edit/" + note.id)}}>
       <div className="block">
-        <p style={{"white-space": "pre-line"}}>{note.text}</p>
+        <p style={{whiteSpace: "pre-line"}}>{note.text}</p>
       </div>
       <div className="block content is-small">
         <p className="has-text-grey-light">{history}</p>
