@@ -4,7 +4,7 @@ function NoteInList({note, id}) {
   let navigate = useNavigate();
   
   const formatDate = (dateStr) => {
-    let date = new Date(dateStr);
+    const date = new Date(dateStr);
 
     return date.toLocaleDateString("fr-FR", {
       weekday: "long",
@@ -13,8 +13,15 @@ function NoteInList({note, id}) {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      second: "2-digit"
     }).replace(", ", " à ");
   };
+
+  let history = "Créée " + formatDate(note.created_at);
+
+  if(note.edited_at !== null){
+    history += " - Modifiée " + formatDate(note.edited_at);
+  }
 
   return (
     <div className="box" onClick={() => {navigate("/edit/" + id)}}>
@@ -22,7 +29,7 @@ function NoteInList({note, id}) {
         <p>{note.text}</p>
       </div>
       <div className="block content is-small">
-        <p className="has-text-grey-light">Créée {formatDate(note.created_at)} - Modifiée {formatDate(note.edited_at)}</p>
+        <p className="has-text-grey-light">{history}</p>
       </div>
     </div>
   );

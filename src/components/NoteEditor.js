@@ -23,7 +23,7 @@ function NoteEditor(props) {
       let note = {
         text: text,
         created_at: now,
-        edited_at: now
+        edited_at: null
       }
       notes.push(note);
     };
