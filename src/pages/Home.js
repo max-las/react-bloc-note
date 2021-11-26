@@ -23,7 +23,7 @@ function Home() {
   }
 
   return (
-    <section className="section">
+    <div className="block">
       <div className="block">
         <Link to="/new" className="button is-link is-outlined">
           <span className="icon">
@@ -44,7 +44,7 @@ function Home() {
           <RichNoteInList key={note.id} note={note} />
         );
       })}
-    </section>
+    </div>
   );
 }
 

@@ -31,6 +31,7 @@ function RichEditor(props) {
           created_at: new Date(),
           edited_at: null
         });
+        navigate("/");
       }else{
         handleCancel();
       }
@@ -53,6 +54,7 @@ function RichEditor(props) {
           content: rawContentState,
           edited_at: new Date()
         });
+        navigate("/");
       }else{
         deleteNote();
       }
@@ -63,7 +65,6 @@ function RichEditor(props) {
 
   const handleSave = async () => {
     await saveNote();
-    navigate("/");
   }
 
   const handleCancel = () => {
