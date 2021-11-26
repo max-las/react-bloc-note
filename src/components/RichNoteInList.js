@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
-function NoteInList({note}) {
+import { Editor } from 'react-draft-wysiwyg';
+
+function RichNoteInList({note}) {
   let navigate = useNavigate();
   
   const formatDate = (dateStr) => {
@@ -26,7 +28,7 @@ function NoteInList({note}) {
   return (
     <div className="box" onClick={() => {navigate("/edit/" + note.id)}}>
       <div className="block">
-        <p style={{whiteSpace: "pre-line"}}>{note.text}</p>
+        <Editor defaultContentState={note.content} readOnly toolbarHidden />
       </div>
       <div className="block content is-small">
         <p className="has-text-grey-light">{history}</p>
@@ -35,4 +37,4 @@ function NoteInList({note}) {
   );
 }
 
-export default NoteInList;
+export default RichNoteInList;

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-import NoteEditor from '../components/NoteEditor.js';
+import RichEditor from '../components/RichEditor.js';
 
 import { db } from "../db.js";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -14,7 +14,7 @@ function Edit(){
       if(isNaN(intId)){
         return undefined;
       }else{
-        return db.notes.get(intId);
+        return db.richNotes.get(intId);
       }
     },
     [],
@@ -23,16 +23,16 @@ function Edit(){
 
   if(!note){
     return(
-      <div className="container">
-        <h1 className="title">404: Note non trouvée</h1>
-      </div>
+      <section className="section">
+        <h2 className="title is-3">404: note introuvable</h2>
+      </section>
     );
   }else{
     return(
-      <div className="container">
-        <h1 className="title">Éditer une note</h1>
-        {note !== "loading" ? <NoteEditor note={note} /> : "Chargement de l'éditeur..." }
-      </div>
+      <section className="section">
+        <h2 className="title is-3">Éditer une note</h2>
+        {note !== "loading" ? <RichEditor note={note} /> : "Chargement de l'éditeur..." }
+      </section>
     );
   }
 }

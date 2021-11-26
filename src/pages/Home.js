@@ -3,32 +3,46 @@ import { Link } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../db.js";
 
-import NoteInList from "../components/NoteInList.js";
+import RichNoteInList from "../components/RichNoteInList.js";
 
 function Home() {
   const notes = useLiveQuery(
-    () => db.notes.toArray()
+    () => db.richNotes.toArray()
   );
 
   const clearAll = () => {
-    db.notes.clear();
+    if(notes){
+      if(notes.length > 0){
+        if(window.confirm("Ceci effacera toutes vos notes. Êtes-vous sûr ?")){
+          db.richNotes.clear();
+        }
+      }
+    }
   }
 
   return (
-    <div className="container">
-      <h1 className="title">
-        Bloc-notes
-      </h1>
+    <section className="section">
+      <div className="block">
+        <Link to="/new" className="button is-link is-outlined">
+          <span className="icon">
+            <i className="fas fa-plus"></i>
+          </span>
+          <span>Nouvelle note</span>
+        </Link>
+        <button className="button is-link is-outlined" onClick={clearAll} style={{ marginLeft: '10px' }}>
+          <span className="icon">
+            <i className="fas fa-broom"></i>
+          </span>
+          <span>Tout effacer</span>
+        </button>
+      </div>
 
       {notes?.map((note) => {
         return (
-          <NoteInList key={note.id} note={note} />
+          <RichNoteInList key={note.id} note={note} />
         );
       })}
-
-      <Link to="/new" className="button">Nouvelle note</Link>
-      <button className="button" onClick={clearAll} style={{ marginLeft: '10px' }}>Tout effacer</button>
-    </div>
+    </section>
   );
 }
 

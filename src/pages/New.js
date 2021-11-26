@@ -1,11 +1,11 @@
-import NoteEditor from '../components/NoteEditor.js';
+import RichEditor from "../components/RichEditor.js";
 
 function New(){
   return(
-    <div className="container">
-      <h1 className="title">Nouvelle note</h1>
-      <NoteEditor />
-    </div>
+    <section className="section">
+      <h2 className="title is-3">Nouvelle note</h2>
+      <RichEditor />
+    </section>
   );
 }
 

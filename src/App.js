@@ -9,16 +9,22 @@ import New from './pages/New.js';
 import Edit from './pages/Edit.js';
 
 import 'bulma/css/bulma.min.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="new" element={<New />} />
-        <Route path="edit/:id" element={<Edit />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="container">
+      <h1 className="title is-1">- SuperNotes -</h1>
+
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="new" element={<New />} />
+          <Route path="edit/:id" element={<Edit />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
