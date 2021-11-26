@@ -1,2 +1,2 @@
 # react-supernotes
-Rich text notepad with React.js 
+Rich text notepad made with React.js 
