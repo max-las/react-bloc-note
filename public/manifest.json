@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SuperNotes",
+  "name": "Maxlas's React SuperNotes",
   "icons": [
     {
       "src": "favicon.ico",

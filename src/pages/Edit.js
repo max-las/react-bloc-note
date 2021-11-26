@@ -8,6 +8,8 @@ import { useLiveQuery } from "dexie-react-hooks";
 function Edit(){
   const {id} = useParams();
 
+  document.title = `Note n°${id} | SuperNotes`;
+
   const note = useLiveQuery(
     () => {
       const intId = parseInt(id);

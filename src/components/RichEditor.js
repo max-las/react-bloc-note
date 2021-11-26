@@ -37,7 +37,7 @@ function RichEditor(props) {
     };
   } else { // edit existing note
     deleteButton = 
-    <button onClick={deleteNote} className="button is-link is-outlined" style={{ marginLeft: '10px' }}>
+    <button onClick={deleteNote} className="button is-link is-outlined" style={{ marginRight: "10px", marginTop: "10px" }}>
       <span className="icon">
         <i className="far fa-trash-alt"></i>
       </span>
@@ -78,14 +78,14 @@ function RichEditor(props) {
         </div>
       </div>
       <div className="block">
-        <button onClick={handleSave} className="button is-link is-outlined">
+        <button onClick={handleSave} className="button is-link is-outlined" style={{ marginRight: "10px", marginTop: "10px" }}>
           <span className="icon">
             <i className="fas fa-check"></i>
           </span>
           <span>Enregister</span>
         </button>
 
-        <button onClick={handleCancel} className="button is-link is-outlined" style={{ marginLeft: '10px' }}>
+        <button onClick={handleCancel} className="button is-link is-outlined" style={{ marginRight: "10px", marginTop: "10px" }}>
           <span className="icon">
             <i className="fas fa-backspace"></i>
           </span>

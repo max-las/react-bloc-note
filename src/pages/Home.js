@@ -6,6 +6,8 @@ import { db } from "../db.js";
 import RichNoteInList from "../components/RichNoteInList.js";
 
 function Home() {
+  document.title = "SuperNotes";
+
   const notes = useLiveQuery(
     () => db.richNotes.toArray()
   );
