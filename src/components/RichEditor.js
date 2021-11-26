@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { db } from "../db.js";
 
-import { ContentState, convertToRaw } from 'draft-js';
+import { ContentState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 
 function RichEditor(props) {
@@ -15,9 +15,7 @@ function RichEditor(props) {
   let initContent = convertToRaw(ContentState.createFromText(""));
   let deleteButton = null;
 
-  const deleteNote = async (event) => {
-    event.preventDefault(); // prevent link from navigating automatically
-
+  const deleteNote = async () => {
     if(window.confirm("Supprimer cette note ?")){
       await db.richNotes.delete(props.note.id);
       navigate("/");
@@ -26,65 +24,76 @@ function RichEditor(props) {
 
   if(typeof props.note === "undefined"){ // new note
     saveNote = async () => {
-      db.richNotes.add({
-        content: rawContentState,
-        created_at: new Date(),
-        edited_at: null
-      });
+      const contentState = convertFromRaw(rawContentState);
+      if(contentState.hasText()){
+        db.richNotes.add({
+          content: rawContentState,
+          created_at: new Date(),
+          edited_at: null
+        });
+      }else{
+        handleCancel();
+      }
     };
   } else { // edit existing note
     deleteButton = 
-    <a href="/" onClick={deleteNote} className="card-footer-item">
+    <button onClick={deleteNote} className="button is-link is-outlined" style={{ marginLeft: '10px' }}>
       <span className="icon">
         <i className="far fa-trash-alt"></i>
       </span>
-      <span style={{ marginLeft: '10px' }}>Supprimer</span>
-    </a>;
+      <span>Supprimer</span>
+    </button>;
 
     initContent = props.note.content;
 
     saveNote = async () => {
-      db.richNotes.update(props.note.id, {
-        content: rawContentState,
-        edited_at: new Date()
-      });
+      const contentState = convertFromRaw(rawContentState);
+      if(contentState.hasText()){
+        db.richNotes.update(props.note.id, {
+          content: rawContentState,
+          edited_at: new Date()
+        });
+      }else{
+        deleteNote();
+      }
     };
   }
 
   let [rawContentState, setRawContentState] = useState(initContent);
 
-  const handleSave = async (event) => {
-    event.preventDefault(); // prevent link from navigating automatically
-
+  const handleSave = async () => {
     await saveNote();
     navigate("/");
   }
 
-  const handleCancel = (event) => {
-    event.preventDefault(); // prevent link from navigating automatically
-
+  const handleCancel = () => {
     window.history.back();
   };
 
   return (
-    <div className="card">
-      <Editor onContentStateChange={setRawContentState} defaultContentState={initContent} />
-      <footer className="card-footer">
-        {/* Use <a/> instead of <button/> for the beautiful style of bulma.css to apply */}
-        <a href="/" onClick={handleSave} className="card-footer-item">
+    <div>
+      <div className="block">
+        <div className="box">
+          <Editor onContentStateChange={setRawContentState} defaultContentState={initContent} placeholder="À quoi pensez-vous ?" editorStyle={{minHeight: "200px"}}/>
+        </div>
+      </div>
+      <div className="block">
+        <button onClick={handleSave} className="button is-link is-outlined">
           <span className="icon">
             <i className="fas fa-check"></i>
           </span>
-          <span style={{ marginLeft: '10px' }}>Enregister</span>
-        </a>
-        {deleteButton}
-        <a href="/" onClick={handleCancel} className="card-footer-item">
+          <span>Enregister</span>
+        </button>
+
+        <button onClick={handleCancel} className="button is-link is-outlined" style={{ marginLeft: '10px' }}>
           <span className="icon">
             <i className="fas fa-backspace"></i>
           </span>
-          <span style={{ marginLeft: '10px' }}>Annuler</span>
-        </a>
-      </footer>
+          <span>Annuler</span>
+        </button>
+
+        {deleteButton}
+      </div>
     </div>
   );
 }
