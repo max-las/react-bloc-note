@@ -8,7 +8,7 @@ import RichNoteInList from "../components/RichNoteInList.js";
 function Home() {
   document.title = "SuperNotes";
 
-  const notes = useLiveQuery(
+  let notes = useLiveQuery(
     () => db.richNotes.toArray()
   );
 
@@ -20,6 +20,16 @@ function Home() {
         }
       }
     }
+  }
+
+  let list = null;
+  if(notes){
+    list = notes.map((note) => {
+      return (
+        <RichNoteInList key={note.id} note={note} />
+      );
+    });
+    list.reverse();
   }
 
   return (
@@ -39,11 +49,7 @@ function Home() {
         </button>
       </div>
 
-      {notes?.map((note) => {
-        return (
-          <RichNoteInList key={note.id} note={note} />
-        );
-      })}
+      {list}
     </div>
   );
 }

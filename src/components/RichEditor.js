@@ -75,7 +75,12 @@ function RichEditor(props) {
     <div>
       <div className="block">
         <div className="box">
-          <Editor onContentStateChange={setRawContentState} defaultContentState={initContent} placeholder="À quoi pensez-vous ?" editorStyle={{minHeight: "200px"}}/>
+          <Editor 
+            onContentStateChange={setRawContentState}
+            defaultContentState={initContent}
+            placeholder="À quoi pensez-vous ?"
+            editorStyle={{minHeight: "200px"}}
+          />
         </div>
       </div>
       <div className="block">
