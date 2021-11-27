@@ -26,8 +26,12 @@ function RichEditor(props) {
     saveNote = async () => {
       const contentState = convertFromRaw(rawContentState);
       if(contentState.hasText()){
-        db.richNotes.add({
+        await db.richNotes.toCollection().modify((note) => {
+          note.order += 1;
+        });
+        await db.richNotes.add({
           content: rawContentState,
+          order: 0,
           created_at: new Date(),
           edited_at: null
         });

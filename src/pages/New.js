@@ -5,7 +5,7 @@ function New(){
 
   return(
     <div className="block">
-      <h2 className="title is-3">Nouvelle note</h2>
+      <h2 className="title is-4">Nouvelle note</h2>
       <RichEditor />
     </div>
   );

@@ -14,8 +14,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
-    <div className="container">
-      <h1 className="title is-1">- SuperNotes -</h1>
+    <div className="container p-4">
+      <h1 className="title is-2">- SuperNotes -</h1>
 
       <BrowserRouter>
         <Routes>

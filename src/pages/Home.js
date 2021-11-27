@@ -35,8 +35,6 @@ function Home() {
   // When notesFromState changes (i.e. when list is reordered), reflect the list order into the DB
   useEffect(() => {
     if(notesFromState){
-      console.log("db reorder");
-
       // build an object that maps notes ids to their current order
       let idToOrder = {};
       for(let i = 0; i < notesFromState.length; i++){
@@ -55,6 +53,7 @@ function Home() {
       if(notesFromDB.length > 0){
         if(window.confirm("Ceci effacera toutes vos notes. Êtes-vous sûr ?")){
           db.richNotes.clear();
+          setNotesFromState([]);
         }
       }
     }
@@ -69,7 +68,7 @@ function Home() {
       );
     });
     sortable = 
-    <ReactSortable list={notesFromState} setList={setNotesFromState}>
+    <ReactSortable list={notesFromState} setList={setNotesFromState} animation={200}>
       {map}
     </ReactSortable>;
   }
@@ -77,13 +76,13 @@ function Home() {
   return (
     <div className="block">
       <div className="block">
-        <Link to="/new" className="button is-link is-outlined">
+        <Link to="/new" className="button is-link is-outlined" style={{ marginRight: "10px", marginTop: "10px" }}>
           <span className="icon">
             <i className="fas fa-plus"></i>
           </span>
           <span>Nouvelle note</span>
         </Link>
-        <button className="button is-link is-outlined" onClick={clearAll} style={{ marginLeft: '10px' }}>
+        <button className="button is-link is-outlined" onClick={clearAll} style={{ marginRight: "10px", marginTop: "10px" }}>
           <span className="icon">
             <i className="fas fa-broom"></i>
           </span>

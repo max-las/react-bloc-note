@@ -26,13 +26,13 @@ function Edit(){
   if(!note){
     return(
       <div className="block">
-        <h2 className="title is-3">404: note introuvable</h2>
+        <h2 className="title is-4">404: note introuvable</h2>
       </div>
     );
   }else{
     return(
       <div className="block">
-        <h2 className="title is-3">Éditer une note</h2>
+        <h2 className="title is-4">Éditer une note</h2>
         {note !== "loading" ? <RichEditor note={note} /> : "Chargement de l'éditeur..." }
       </div>
     );
