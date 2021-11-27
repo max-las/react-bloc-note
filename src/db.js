@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 
 export const db = new Dexie("notepad-db");
-db.version(3).stores({
-  richNotes: "++id, content, created_at, edited_at"
+db.version(4).stores({
+  richNotes: "++id, order, content, created_at, edited_at"
 });

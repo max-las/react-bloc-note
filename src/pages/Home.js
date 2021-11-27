@@ -1,20 +1,58 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { useLiveQuery } from "dexie-react-hooks";
+import { useAsync } from "react-async";
+
+import { ReactSortable } from "react-sortablejs";
+
 import { db } from "../db.js";
 
 import RichNoteInList from "../components/RichNoteInList.js";
 
+// Async function that loads notes from DB. To be used with useAsync() hook
+const loadNotes = async () => {
+  let notes = await db.richNotes.toCollection().sortBy("order");
+  return notes;
+}
+
 function Home() {
   document.title = "SuperNotes";
 
-  let notes = useLiveQuery(
-    () => db.richNotes.toArray()
-  );
+  // notesFromDB will be undefined until notes are loaded from the DB
+  let {data: notesFromDB} = useAsync({
+    promiseFn: loadNotes
+  });
+
+  // ReactSortable component requires a variable bound to a useState hook
+  // So can't use notesFromDB directly, because it's bound to a useAsync hook 
+  let [notesFromState, setNotesFromState] = useState(undefined);
+
+  // When notesFromDB changes (i.e. when notes are loaded), reflect its value (the notes) into notesFromState
+  useEffect(() => {
+    setNotesFromState(notesFromDB)
+  }, [notesFromDB]);
+
+  // When notesFromState changes (i.e. when list is reordered), reflect the list order into the DB
+  useEffect(() => {
+    if(notesFromState){
+      console.log("db reorder");
+
+      // build an object that maps notes ids to their current order
+      let idToOrder = {};
+      for(let i = 0; i < notesFromState.length; i++){
+        idToOrder[notesFromState[i].id.toString()] = i;
+      }
+  
+      // use the object to set each note order in the DB
+      db.richNotes.toCollection().modify((note) => {
+        note.order = idToOrder[note.id.toString()];
+      });
+    }
+  }, [notesFromState]);
 
   const clearAll = () => {
-    if(notes){
-      if(notes.length > 0){
+    if(notesFromDB){
+      if(notesFromDB.length > 0){
         if(window.confirm("Ceci effacera toutes vos notes. Êtes-vous sûr ?")){
           db.richNotes.clear();
         }
@@ -22,14 +60,18 @@ function Home() {
     }
   }
 
-  let list = null;
-  if(notes){
-    list = notes.map((note) => {
+  let map = null;
+  let sortable = null;
+  if(notesFromState){
+    map = notesFromState.map((note) => {
       return (
         <RichNoteInList key={note.id} note={note} />
       );
     });
-    list.reverse();
+    sortable = 
+    <ReactSortable list={notesFromState} setList={setNotesFromState}>
+      {map}
+    </ReactSortable>;
   }
 
   return (
@@ -49,7 +91,7 @@ function Home() {
         </button>
       </div>
 
-      {list}
+      {sortable}
     </div>
   );
 }
