@@ -68,7 +68,7 @@ function Home() {
       );
     });
     sortable = 
-    <ReactSortable list={notesFromState} setList={setNotesFromState} animation={200}>
+    <ReactSortable list={notesFromState} setList={setNotesFromState} animation={200} delay={200} delayOnTouchOnly={true} >
       {map}
     </ReactSortable>;
   }
