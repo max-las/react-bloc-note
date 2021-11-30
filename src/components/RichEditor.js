@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../db.js";
 
 import ReactQuill from 'react-quill';
-import Delta from "quill-delta";
 
 function RichEditor(props) {
   let navigate = useNavigate();
