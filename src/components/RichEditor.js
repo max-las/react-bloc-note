@@ -12,7 +12,7 @@ function RichEditor(props) {
   let saveNote = async () => {};
 
   // default for new note
-  let initContent = new Delta();
+  let initContent = null;
 
   let deleteButton = null;
 
@@ -25,7 +25,7 @@ function RichEditor(props) {
 
   if(typeof props.note === "undefined"){ // new note
     saveNote = async () => {
-      if(true){
+      if(quillContent){
         await db.richNotes.toCollection().modify((note) => {
           note.order += 1;
         });
@@ -52,7 +52,7 @@ function RichEditor(props) {
     initContent = props.note.content;
 
     saveNote = async () => {
-      if(true){
+      if(quillContent){
         db.richNotes.update(props.note.id, {
           content: quillContent,
           edited_at: new Date()
@@ -75,7 +75,11 @@ function RichEditor(props) {
   };
 
   const handleQuillChange = (content, delta, source, editor) => {
-    setQuillContent(editor.getContents());
+    if(editor.getLength() === 1){
+      setQuillContent(null);
+    }else{
+      setQuillContent(editor.getContents());
+    }
   };
 
   return (

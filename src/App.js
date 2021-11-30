@@ -9,7 +9,6 @@ import New from './pages/New.js';
 import Edit from './pages/Edit.js';
 
 import 'bulma/css/bulma.min.css';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'react-quill/dist/quill.snow.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './App.css';

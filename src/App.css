@@ -2,3 +2,21 @@ pre.ql-snow {
   background-color: initial;
   padding: initial;
 }
+
+.ql-container.ql-snow {
+  border: none;
+}
+
+.ql-editor[contenteditable="true"] {
+  min-height: 150px;
+}
+
+.ql-editor.ql-blank::before {
+  left: initial;
+  right: initial;
+}
+
+.ql-editor {
+  padding-left: 0px;
+  padding-right: 0px;
+}
