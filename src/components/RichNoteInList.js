@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import { Editor } from 'react-draft-wysiwyg';
+import ReactQuill from 'react-quill';
 
 function RichNoteInList({note}) {
   let navigate = useNavigate();
@@ -28,7 +28,14 @@ function RichNoteInList({note}) {
   return (
     <div className="box" onClick={() => {navigate("/edit/" + note.id)}}>
       <div className="block">
-        <Editor defaultContentState={note.content} readOnly toolbarHidden />
+        <ReactQuill
+          theme="snow"
+          defaultValue={note.content}
+          readOnly
+          modules={{
+            toolbar: false
+          }}
+        />
       </div>
       <div className="block content is-small">
         <p className="has-text-grey-light">{history}</p>

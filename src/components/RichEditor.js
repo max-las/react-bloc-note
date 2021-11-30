@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import { db } from "../db.js";
 
-import { ContentState, convertToRaw, convertFromRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
+import ReactQuill from 'react-quill';
+import Delta from "quill-delta";
 
 function RichEditor(props) {
   let navigate = useNavigate();
@@ -12,7 +12,8 @@ function RichEditor(props) {
   let saveNote = async () => {};
 
   // default for new note
-  let initContent = convertToRaw(ContentState.createFromText(""));
+  let initContent = new Delta();
+
   let deleteButton = null;
 
   const deleteNote = async () => {
@@ -24,13 +25,12 @@ function RichEditor(props) {
 
   if(typeof props.note === "undefined"){ // new note
     saveNote = async () => {
-      const contentState = convertFromRaw(rawContentState);
-      if(contentState.hasText()){
+      if(true){
         await db.richNotes.toCollection().modify((note) => {
           note.order += 1;
         });
         await db.richNotes.add({
-          content: rawContentState,
+          content: quillContent,
           order: 0,
           created_at: new Date(),
           edited_at: null
@@ -52,10 +52,9 @@ function RichEditor(props) {
     initContent = props.note.content;
 
     saveNote = async () => {
-      const contentState = convertFromRaw(rawContentState);
-      if(contentState.hasText()){
+      if(true){
         db.richNotes.update(props.note.id, {
-          content: rawContentState,
+          content: quillContent,
           edited_at: new Date()
         });
         navigate("/");
@@ -65,25 +64,40 @@ function RichEditor(props) {
     };
   }
 
-  let [rawContentState, setRawContentState] = useState(initContent);
+  let [quillContent, setQuillContent] = useState(initContent);
 
   const handleSave = async () => {
     await saveNote();
-  }
+  };
 
   const handleCancel = () => {
     window.history.back();
+  };
+
+  const handleQuillChange = (content, delta, source, editor) => {
+    setQuillContent(editor.getContents());
   };
 
   return (
     <div>
       <div className="block">
         <div className="box">
-          <Editor 
-            onContentStateChange={setRawContentState}
-            defaultContentState={initContent}
+          <ReactQuill
+            theme="snow"
             placeholder="À quoi pensez-vous ?"
-            editorStyle={{minHeight: "200px"}}
+            defaultValue={initContent}
+            onChange={handleQuillChange}
+            preserveWhitespace
+            modules={{
+              toolbar: [
+                [{ 'font': [] }, { 'size': [] }],
+                [{ 'color': [] }, { 'background': [] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'align': [] }],
+                ['link', 'image']
+              ]
+            }}
           />
         </div>
       </div>
