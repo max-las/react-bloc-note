@@ -20,3 +20,7 @@ pre.ql-snow {
   padding-left: 0px;
   padding-right: 0px;
 }
+
+.NoteInList * {
+  cursor: default;
+}
