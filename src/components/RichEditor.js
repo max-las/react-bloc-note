@@ -94,7 +94,6 @@ function RichEditor(props) {
             modules={{
               toolbar: [
                 [{ 'font': [] }, { 'size': [] }],
-                [{ 'color': [] }, { 'background': [] }],
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'align': [] }],
