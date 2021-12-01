@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { db } from "../db.js";
-
 import ReactQuill from 'react-quill';
 
-function RichEditor(props) {
+function RichEditor({ loadedNote, adapter }) {
   let navigate = useNavigate();
 
   let saveNote = async () => {};
@@ -17,20 +15,17 @@ function RichEditor(props) {
 
   const deleteNote = async () => {
     if(window.confirm("Supprimer cette note ?")){
-      await db.richNotes.delete(props.note.id);
+      await adapter.delete(loadedNote.id);
       navigate("/");
     }
   };
 
-  if(typeof props.note === "undefined"){ // new note
+  if(typeof loadedNote === "undefined"){ // new note
+    console.log("new");
     saveNote = async () => {
       if(quillContent){
-        await db.richNotes.toCollection().modify((note) => {
-          note.order += 1;
-        });
-        await db.richNotes.add({
+        await adapter.add({
           content: quillContent,
-          order: 0,
           created_at: new Date(),
           edited_at: null
         });
@@ -40,6 +35,7 @@ function RichEditor(props) {
       }
     };
   } else { // edit existing note
+    console.log("edit");
     deleteButton = 
     <button onClick={deleteNote} className="button is-link is-outlined" style={{ marginRight: "10px", marginTop: "10px" }}>
       <span className="icon">
@@ -48,11 +44,11 @@ function RichEditor(props) {
       <span>Supprimer</span>
     </button>;
 
-    initContent = props.note.content;
+    initContent = loadedNote.content;
 
     saveNote = async () => {
       if(quillContent){
-        db.richNotes.update(props.note.id, {
+        await adapter.update(loadedNote.id, {
           content: quillContent,
           edited_at: new Date()
         });

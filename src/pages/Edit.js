@@ -1,39 +1,42 @@
 import { useParams } from "react-router-dom";
+import { useAsync } from "react-async";
 
 import RichEditor from '../components/RichEditor.js';
 
-import { db } from "../db.js";
-import { useLiveQuery } from "dexie-react-hooks";
+const loadNote = async ({id, adapter}) => {
+  let note = await adapter.getOne(id);
+  return note;
+}
 
-function Edit(){
-  const {id} = useParams();
+function Edit({adapter}){
+  let {id} = useParams();
+  id = parseInt(id);
 
-  document.title = `Note n°${id} | SuperNotes`;
+  if(isNaN(id)){
+    id = -1;
+  }
 
-  const note = useLiveQuery(
-    () => {
-      const intId = parseInt(id);
-      if(isNaN(intId)){
-        return undefined;
-      }else{
-        return db.richNotes.get(intId);
-      }
-    },
-    [],
-    "loading"
-  );
+  const {data: note} = useAsync({
+    promiseFn: loadNote,
+    id: id,
+    adapter: adapter
+  });
 
-  if(!note){
+  if(note === false){
+    document.title = `Note introuvable | SuperNotes`;
+
     return(
       <div className="block">
         <h2 className="title is-4">404: note introuvable</h2>
       </div>
     );
   }else{
+    document.title = `Note n°${id} | SuperNotes`;
+  
     return(
       <div className="block">
         <h2 className="title is-4">Éditer une note</h2>
-        {note !== "loading" ? <RichEditor note={note} /> : "Chargement de l'éditeur..." }
+        {typeof note !== "undefined" ? <RichEditor loadedNote={note} adapter={adapter} /> : "Chargement de l'éditeur..." }
       </div>
     );
   }

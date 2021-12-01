@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 
 import { ReactSortable } from "react-sortablejs";
 
-import { db } from "../db.js";
-
 import RichNoteInList from "../components/RichNoteInList.js";
 
-function NoteList({ notesFromProps }){
+function NoteList({ notesFromProps, adapter }){
   let [notesFromState, setNotesFromState] = useState(notesFromProps);
 
   useEffect(() => {
@@ -18,16 +16,16 @@ function NoteList({ notesFromProps }){
     }
 
     // use the object to set each note order in the DB
-    db.richNotes.toCollection().modify((note) => {
+    adapter.modify((note) => {
       note.order = idToOrder[note.id.toString()];
     });
-  }, [notesFromState]);
+  }, [notesFromState, adapter]);
 
   const clearAll = () => {
     if(notesFromState){
       if(notesFromState.length > 0){
         if(window.confirm("Ceci effacera toutes vos notes. Êtes-vous sûr ?")){
-          db.richNotes.clear();
+          adapter.clear();
           setNotesFromState([]);
         }
       }

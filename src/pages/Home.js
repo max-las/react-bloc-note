@@ -1,26 +1,18 @@
 import { useAsync } from "react-async";
 
-import { db } from "../db.js";
-
 import NoteList from "../components/NoteList.js";
 
-// Async function that loads notes from DB. To be used with useAsync() hook
-const loadNotes = async () => {
-  let notes = await db.richNotes.toCollection().sortBy("order");
-  return notes;
-}
-
-function Home() {
+function Home({adapter}) {
   document.title = "SuperNotes";
 
   // notesFromDB will be undefined until notes are loaded from the DB
   let {data: notesFromDB} = useAsync({
-    promiseFn: loadNotes
+    promiseFn: adapter.getAll
   });
 
   if(notesFromDB){
     return (
-      <NoteList notesFromProps={notesFromDB} />
+      <NoteList notesFromProps={notesFromDB} adapter={adapter} />
     );
   }else{
     return (
