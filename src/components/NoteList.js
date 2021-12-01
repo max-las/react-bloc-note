@@ -57,7 +57,7 @@ function NoteList({ notesFromProps }){
         </button>
       </div>
 
-      <ReactSortable list={notesFromState} setList={setNotesFromState} animation={200} delay={200} delayOnTouchOnly={true} >
+      <ReactSortable list={notesFromState} setList={setNotesFromState} animation={200} delay={100} chosenClass="sortable-chosen">
         {map}
       </ReactSortable>
     </div>

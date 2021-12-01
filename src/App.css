@@ -23,4 +23,9 @@ pre.ql-snow {
 
 .NoteInList * {
   cursor: default;
+  user-select: none;
+}
+
+.sortable-chosen {
+  border: 2px solid #485fc7;
 }
