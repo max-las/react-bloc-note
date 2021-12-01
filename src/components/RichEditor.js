@@ -21,7 +21,6 @@ function RichEditor({ loadedNote, adapter }) {
   };
 
   if(typeof loadedNote === "undefined"){ // new note
-    console.log("new");
     saveNote = async () => {
       if(quillContent){
         await adapter.add({
@@ -35,7 +34,6 @@ function RichEditor({ loadedNote, adapter }) {
       }
     };
   } else { // edit existing note
-    console.log("edit");
     deleteButton = 
     <button onClick={deleteNote} className="button is-link is-outlined" style={{ marginRight: "10px", marginTop: "10px" }}>
       <span className="icon">

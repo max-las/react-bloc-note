@@ -10,7 +10,7 @@ import Home from './pages/Home.js';
 import New from './pages/New.js';
 import Edit from './pages/Edit.js';
 import IndexedDBAdapter from "./adapters/IndexedDBAdapter.js";
-import MemoryAdapter from "./adapters/MemoryAdapter.js";
+import SessionAdapter from "./adapters/SessionAdapter.js";
 
 import 'bulma/css/bulma.min.css';
 import 'react-quill/dist/quill.snow.css';
@@ -41,7 +41,7 @@ function App() {
   if(indexedDBEnabled === true){
     adapter = new IndexedDBAdapter();
   } else if(indexedDBEnabled === false) {
-    adapter = new MemoryAdapter();
+    adapter = new SessionAdapter();
   }
 
   if(adapter){

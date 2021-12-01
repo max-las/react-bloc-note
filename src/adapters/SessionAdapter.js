@@ -1,6 +1,15 @@
-function MemoryAdapter(){
+function SessionAdapter(){
   let nextId = 0;
   let notes = [];
+
+  let notesJSON = sessionStorage.getItem("notes");
+  if(notesJSON !== null){
+    notes = JSON.parse(notesJSON); 
+  }
+
+  const saveSession = () => {
+    sessionStorage.setItem("notes", JSON.stringify(notes));
+  }
 
   this.add = async (newNote) => {
     notes.forEach((note) => {
@@ -10,6 +19,8 @@ function MemoryAdapter(){
     nextId += 1;
     newNote.order = 0;
     notes.push(newNote);
+
+    saveSession();
 
     return true;
   };
@@ -21,11 +32,15 @@ function MemoryAdapter(){
       }
     });
 
+    saveSession();
+
     return true;
   };
 
   this.modify = async (fn) => {
     notes.forEach(fn);
+
+    saveSession();
 
     return true;
   };
@@ -36,11 +51,15 @@ function MemoryAdapter(){
     });
     notes.splice(index, 1);
 
+    saveSession();
+
     return true;
   };
 
   this.clear = async () => {
     notes.splice(0, notes.length);
+
+    saveSession();
 
     return true;
   }
@@ -65,4 +84,4 @@ function MemoryAdapter(){
   };
 }
 
-export default MemoryAdapter;
+export default SessionAdapter;
