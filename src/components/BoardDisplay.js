@@ -41,24 +41,6 @@ function BoardDisplay({ notesFromProps, boardId, adapter }){
     }
   }
 
-  let [modalContent, setModalContent] = useState(null);
-
-  const activateModal = (content) => {
-    setModalContent(content);
-  }
-
-  const closeModal = () => {
-    setModalContent(null);
-  }
-
-  const removeNoteFromState = (noteId) => {
-    let index = notesFromState.findIndex((note) => {
-      return note.id === noteId;
-    });
-    notesFromState.splice(index, 1);
-    setNotesFromState(notesFromState);
-  }
-
   let sortableList =
   <div style={{textAlign: "center"}}>
     <img src="/img/69-eye-outline.gif" height="100" width="100" alt=""/>
@@ -68,7 +50,7 @@ function BoardDisplay({ notesFromProps, boardId, adapter }){
   if(notesFromState.length > 0){
     let map = notesFromState.map((note) => {
       return (
-        <RichNoteInList key={note.id} note={note} adapter={adapter} activateModal={activateModal} closeModal={closeModal} removeNoteFromState={removeNoteFromState} />
+        <RichNoteInList key={note.id} note={note} />
       );
     });
 
@@ -101,16 +83,6 @@ function BoardDisplay({ notesFromProps, boardId, adapter }){
         </button>
       </div>
       {sortableList}
-
-      <div className={`modal ${modalContent !== null ? "is-active" : ""}`}>
-        <div className="modal-background" onClick={closeModal}></div>
-        <div className="modal-content">
-          <div className="p-4">
-            {modalContent}
-          </div>
-        </div>
-        <button className="modal-close is-large" aria-label="close" onClick={closeModal}></button>
-      </div>
     </div>
   );
 

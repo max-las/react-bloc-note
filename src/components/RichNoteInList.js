@@ -2,9 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import ReactQuill from 'react-quill';
 
-import BoardInList from "./BoardInList.js";
-
-function RichNoteInList({note, activateModal, closeModal, removeNoteFromState, adapter}) {
+function RichNoteInList({note}) {
   let navigate = useNavigate();
   
   const formatDate = (dateStr) => {
@@ -20,30 +18,6 @@ function RichNoteInList({note, activateModal, closeModal, removeNoteFromState, a
       second: "2-digit"
     }).replace(", ", " à ");
   };
-
-  const moveNote = async () => {
-    let boards = await adapter.getBoards();
-    let map = boards.map((board) => {
-      if(board.id !== note.board_id){
-        return (
-          <BoardInList key={board.id} board={board} click={() => {moveNoteTo(board.id)}} />
-        );
-      }
-      return(null);
-    });
-    activateModal(
-      <div>
-        <h1 className="title has-text-white">Déplacer vers quel tableau ?</h1>
-        {map}
-      </div>
-    );
-  }
-
-  const moveNoteTo = async (boardId) => {
-    await adapter.moveNoteToBoard(note.id, boardId);
-    removeNoteFromState(note.id);
-    closeModal();
-  }
 
   let history = "Créée " + formatDate(note.created_at);
 
@@ -64,19 +38,7 @@ function RichNoteInList({note, activateModal, closeModal, removeNoteFromState, a
         />
       </div>
       <div className="block content is-small">
-        <div className="level">
-          <div className="level-left">
-            <p className="level-item has-text-grey-light">{history}</p>
-          </div>
-          <div className="level-right">
-            <button className="level-item button is-link is-outlined" onClick={moveNote} >
-              <span className="icon">
-                <i className="fas fa-sign-out-alt"></i>
-              </span>
-              <span>Déplacer vers...</span>
-            </button>
-          </div>
-        </div>
+        <p className="has-text-grey-light">{history}</p>
       </div>
     </div>
   );

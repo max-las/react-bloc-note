@@ -8,6 +8,11 @@ const loadNote = async ({id, adapter}) => {
   return note;
 }
 
+const canNoteMove = async ({adapter}) => {
+  let boards = await adapter.getBoards();
+  return boards.length > 1;
+}
+
 function Edit({adapter}){
   let {id} = useParams();
   id = parseInt(id);
@@ -19,6 +24,11 @@ function Edit({adapter}){
   const {data: note} = useAsync({
     promiseFn: loadNote,
     id: id,
+    adapter: adapter
+  });
+
+  const {data: canMove} = useAsync({
+    promiseFn: canNoteMove,
     adapter: adapter
   });
 
@@ -36,7 +46,7 @@ function Edit({adapter}){
     return(
       <div className="block">
         <h2 className="title is-4">Éditer une note</h2>
-        {typeof note !== "undefined" ? <RichEditor loadedNote={note} adapter={adapter} /> : "Chargement de l'éditeur..." }
+        {typeof note !== "undefined" ? <RichEditor loadedNote={note} adapter={adapter} canMove={canMove === true} /> : "Chargement de l'éditeur..." }
       </div>
     );
   }

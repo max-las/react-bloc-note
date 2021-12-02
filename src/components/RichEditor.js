@@ -3,15 +3,23 @@ import { useNavigate } from "react-router-dom";
 
 import ReactQuill from 'react-quill';
 
-function RichEditor({ loadedNote, adapter, boardId }) {
+import BoardInList from "./BoardInList.js";
+
+function RichEditor({ loadedNote, adapter, boardId, canMove }) {
   let navigate = useNavigate();
 
   let saveNote = async () => {};
 
   // default for new note
   let initContent = null;
-
   let deleteButton = null;
+  let moveButton = null;
+
+  let [modalContent, setModalContent] = useState(null);
+
+  const closeModal = () => {
+    setModalContent(null);
+  }
 
   const deleteNote = async () => {
     if(window.confirm("Supprimer cette note ?")){
@@ -19,6 +27,29 @@ function RichEditor({ loadedNote, adapter, boardId }) {
       navigate(`/board/${loadedNote.board_id}`);
     }
   };
+
+  const moveNote = async () => {
+    let boards = await adapter.getBoards();
+    let map = boards.map((board) => {
+      if(board.id !== loadedNote.board_id){
+        return (
+          <BoardInList key={board.id} board={board} click={() => {moveNoteTo(board.id)}} />
+        );
+      }
+      return(null);
+    });
+    setModalContent(
+      <div>
+        <h1 className="title has-text-white">Déplacer vers quel tableau ?</h1>
+        {map}
+      </div>
+    );
+  }
+
+  const moveNoteTo = async (boardId) => {
+    await adapter.moveNoteToBoard(loadedNote.id, boardId);
+    navigate(`/board/${boardId}`);
+  }
 
   if(typeof loadedNote === "undefined"){ // new note
     saveNote = async () => {
@@ -41,6 +72,16 @@ function RichEditor({ loadedNote, adapter, boardId }) {
       </span>
       <span>Supprimer</span>
     </button>;
+
+    if(canMove){
+      moveButton =
+      <button className="button is-link is-outlined" onClick={moveNote} style={{ marginRight: "10px", marginTop: "10px" }}>
+        <span className="icon">
+          <i className="fas fa-sign-out-alt"></i>
+        </span>
+        <span>Déplacer vers...</span>
+      </button>
+    }
 
     initContent = loadedNote.content;
 
@@ -112,7 +153,19 @@ function RichEditor({ loadedNote, adapter, boardId }) {
           <span>Annuler</span>
         </button>
 
+        {moveButton}
+
         {deleteButton}
+      </div>
+
+      <div className={`modal ${modalContent !== null ? "is-active" : ""}`}>
+        <div className="modal-background" onClick={closeModal}></div>
+        <div className="modal-content">
+          <div className="p-4">
+            {modalContent}
+          </div>
+        </div>
+        <button className="modal-close is-large" aria-label="close" onClick={closeModal}></button>
       </div>
     </div>
   );
