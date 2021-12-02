@@ -68,6 +68,26 @@ function IndexedDBAdapter(){
     return notes;
   };
 
+  this.moveNoteToBoard = async (noteId, boardId) => {
+    let note = await db.richNotes.get(noteId);
+    let previousBoard = await db.boards.get(note.board_id);
+
+    await db.boards.where({id: previousBoard.id}).modify((board) => {
+      let index = board.note_ids.indexOf(noteId);
+      board.note_ids.splice(index, 1);
+    });
+
+    await db.boards.where({id: boardId}).modify((board) => {
+      board.note_ids.push(noteId);
+    });
+
+    await db.richNotes.update(noteId, {
+      board_id: boardId
+    });
+
+    return true;
+  }
+
   this.createBoard = async (name) => {
     await db.boards.toCollection().modify((board) => {
       board.order += 1;
@@ -83,6 +103,12 @@ function IndexedDBAdapter(){
 
   this.modifyBoard = async (fn) => {
     await db.boards.toCollection().modify(fn);
+
+    return true;
+  };
+
+  this.updateBoard = async (id, changes) => {
+    await db.boards.update(id, changes);
 
     return true;
   };

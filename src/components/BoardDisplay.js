@@ -5,7 +5,7 @@ import { ReactSortable } from "react-sortablejs";
 
 import RichNoteInList from "../components/RichNoteInList.js";
 
-function NoteList({ notesFromProps, boardId, adapter }){
+function BoardDisplay({ notesFromProps, boardId, adapter }){
   const navigate = useNavigate();
 
   let [notesFromState, setNotesFromState] = useState(notesFromProps);
@@ -35,10 +35,28 @@ function NoteList({ notesFromProps, boardId, adapter }){
   }
 
   const deleteBoard = async () => {
-    if(window.confirm("Supprimer ce tabelau ?")){
+    if(window.confirm("Supprimer ce tableau ?")){
       await adapter.deleteBoard(boardId);
       navigate("/");
     }
+  }
+
+  let [modalContent, setModalContent] = useState(null);
+
+  const activateModal = (content) => {
+    setModalContent(content);
+  }
+
+  const closeModal = () => {
+    setModalContent(null);
+  }
+
+  const removeNoteFromState = (noteId) => {
+    let index = notesFromState.findIndex((note) => {
+      return note.id === noteId;
+    });
+    notesFromState.splice(index, 1);
+    setNotesFromState(notesFromState);
   }
 
   let sortableList =
@@ -50,7 +68,7 @@ function NoteList({ notesFromProps, boardId, adapter }){
   if(notesFromState.length > 0){
     let map = notesFromState.map((note) => {
       return (
-        <RichNoteInList key={note.id} note={note} />
+        <RichNoteInList key={note.id} note={note} adapter={adapter} activateModal={activateModal} closeModal={closeModal} removeNoteFromState={removeNoteFromState} />
       );
     });
 
@@ -75,17 +93,25 @@ function NoteList({ notesFromProps, boardId, adapter }){
           </span>
           <span>Vider ce tableau</span>
         </button>
-        <button className="button is-danger is-outlined" onClick={deleteBoard} style={{ marginRight: "10px", marginTop: "10px" }}>
+        <button className="button is-link is-outlined" onClick={deleteBoard} style={{ marginRight: "10px", marginTop: "10px" }}>
           <span className="icon">
-            <i class="far fa-trash-alt"></i>
+            <i className="far fa-trash-alt"></i>
           </span>
           <span>Supprimer ce tableau</span>
         </button>
       </div>
       {sortableList}
+
+      <div className={`modal ${modalContent !== null ? "is-active" : ""}`}>
+        <div className="modal-background" onClick={closeModal}></div>
+        <div className="modal-content">
+          {modalContent}
+        </div>
+        <button className="modal-close is-large" aria-label="close" onClick={closeModal}></button>
+      </div>
     </div>
   );
 
 }
 
-export default NoteList;
+export default BoardDisplay;

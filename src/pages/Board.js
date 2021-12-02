@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useAsync } from "react-async";
 
-import NoteList from "../components/NoteList.js";
+import BoardDisplay from "../components/BoardDisplay.js";
+import EditableBoardTitle from "../components/EditableBoardTitle.js";
 
 const loadBoard = async ({id, adapter}) => {
   let board = await adapter.getBoard(id);
@@ -47,8 +48,8 @@ function Board({adapter}){
 
       return(
         <div className="block">
-          <h2 className="title is-4">{board.name}</h2>
-          <NoteList notesFromProps={notes} adapter={adapter} boardId={board.id} />
+          <EditableBoardTitle board={board} adapter={adapter} />
+          <BoardDisplay notesFromProps={notes} adapter={adapter} boardId={board.id} />
         </div>
       );
     }else{

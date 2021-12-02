@@ -1,10 +1,6 @@
-import { useNavigate } from "react-router-dom";
-
-function BoardInList({board}) {
-  let navigate = useNavigate();
-
+function BoardInList({board, click}) {
   return (
-    <div className="box InSortableList" onClick={() => {navigate("/board/" + board.id)}}>
+    <div className="box InSortableList BoardInList" onClick={click}>
       <div className="block">
         <strong>{board.name}</strong>
       </div>

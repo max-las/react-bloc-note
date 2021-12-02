@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { ReactSortable } from "react-sortablejs";
 
 import BoardInList from "../components/BoardInList.js";
 
 function BoardList({ boardsFromProps, adapter }){
+  let navigate = useNavigate();
+
   let [boardsFromState, setBoardsFromState] = useState(boardsFromProps);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ function BoardList({ boardsFromProps, adapter }){
   if(boardsFromState.length > 0){
     let map = boardsFromState.map((board) => {
       return (
-        <BoardInList key={board.id} board={board} />
+        <BoardInList key={board.id} board={board} click={() => {navigate("/board/" + board.id)}} />
       );
     });
 

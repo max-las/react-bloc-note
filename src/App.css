@@ -27,8 +27,11 @@ pre.ql-snow {
 }
 
 .InSortableList * {
-  cursor: default;
   user-select: none;
+}
+
+.BoardInList {
+  border: 2px solid #00d1b2;
 }
 
 .sortable-chosen {

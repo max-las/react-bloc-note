@@ -4,7 +4,7 @@ import { useAsync } from "react-async";
 import RichEditor from '../components/RichEditor.js';
 
 const loadNote = async ({id, adapter}) => {
-  let note = await adapter.getOne(id);
+  let note = await adapter.getNote(id);
   return note;
 }
 

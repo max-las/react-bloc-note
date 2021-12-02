@@ -2,7 +2,9 @@ import { useNavigate } from "react-router-dom";
 
 import ReactQuill from 'react-quill';
 
-function RichNoteInList({note}) {
+import BoardInList from "./BoardInList.js";
+
+function RichNoteInList({note, activateModal, closeModal, removeNoteFromState, adapter}) {
   let navigate = useNavigate();
   
   const formatDate = (dateStr) => {
@@ -19,6 +21,30 @@ function RichNoteInList({note}) {
     }).replace(", ", " à ");
   };
 
+  const moveNote = async () => {
+    let boards = await adapter.getBoards();
+    let map = boards.map((board) => {
+      if(board.id !== note.board_id){
+        return (
+          <BoardInList key={board.id} board={board} click={() => {moveNoteTo(board.id)}} />
+        );
+      }
+      return(null);
+    });
+    activateModal(
+      <div>
+        <h1 className="title has-text-white">Déplacer vers quel tableau ?</h1>
+        {map}
+      </div>
+    );
+  }
+
+  const moveNoteTo = async (boardId) => {
+    await adapter.moveNoteToBoard(note.id, boardId);
+    removeNoteFromState(note.id);
+    closeModal();
+  }
+
   let history = "Créée " + formatDate(note.created_at);
 
   if(note.edited_at !== null){
@@ -26,8 +52,8 @@ function RichNoteInList({note}) {
   }
 
   return (
-    <div className="box InSortableList" onClick={() => {navigate("/edit/" + note.id)}}>
-      <div className="block">
+    <div className="box InSortableList">
+      <div className="block" onClick={() => {navigate("/edit/" + note.id)}}>
         <ReactQuill
           theme="snow"
           defaultValue={note.content}
@@ -38,7 +64,19 @@ function RichNoteInList({note}) {
         />
       </div>
       <div className="block content is-small">
-        <p className="has-text-grey-light">{history}</p>
+        <div className="level">
+          <div className="level-left">
+            <p className="level-item has-text-grey-light">{history}</p>
+          </div>
+          <div className="level-right">
+            <button className="level-item button is-link is-outlined" onClick={moveNote} >
+              <span className="icon">
+                <i className="fas fa-sign-out-alt"></i>
+              </span>
+              <span>Déplacer vers...</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
