@@ -7,8 +7,14 @@ function SessionAdapter(){
     notes = JSON.parse(notesJSON); 
   }
 
+  let nextIdStored = sessionStorage.getItem("nextId");
+  if(nextIdStored !== null){
+    nextId = parseInt(nextIdStored); 
+  }
+
   const saveSession = () => {
     sessionStorage.setItem("notes", JSON.stringify(notes));
+    sessionStorage.setItem("nextId", nextId.toString());
   }
 
   this.add = async (newNote) => {

@@ -29,3 +29,8 @@ pre.ql-snow {
 .sortable-chosen {
   border: 2px solid #485fc7;
 }
+
+@font-face {
+  font-family: "Gecko Lunch";
+  src: url("./fonts/Gecko_Lunch.ttf") format('truetype');
+}

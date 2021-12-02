@@ -30,8 +30,6 @@ const checkIndexedDB = async () => {
 }
 
 function App() {
-  const AdapterContext = React.createContext();
-
   let {data: indexedDBEnabled} = useAsync({
     promiseFn: checkIndexedDB
   });
@@ -46,23 +44,17 @@ function App() {
 
   if(adapter){
     return (
-      <AdapterContext.Provider value={adapter}>
-        <AdapterContext.Consumer>
-          {adapter => (
-            <div className="container p-4">
-              <h1 className="title is-2">- SuperNotes -</h1>
-  
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Home adapter={adapter} />} />
-                  <Route path="new" element={<New adapter={adapter} />} />
-                  <Route path="edit/:id" element={<Edit adapter={adapter} />} />
-                </Routes>
-              </BrowserRouter>
-            </div>
-          )}
-        </AdapterContext.Consumer>
-      </AdapterContext.Provider>
+      <div className="container p-4">
+        <h1 className="title is-2" style={{fontFamily: "Gecko Lunch"}}>SuperNotes</h1>
+
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home adapter={adapter} />} />
+            <Route path="new" element={<New adapter={adapter} />} />
+            <Route path="edit/:id" element={<Edit adapter={adapter} />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     );
   }else{
     return (
