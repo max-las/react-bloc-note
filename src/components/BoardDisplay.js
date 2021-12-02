@@ -105,7 +105,9 @@ function BoardDisplay({ notesFromProps, boardId, adapter }){
       <div className={`modal ${modalContent !== null ? "is-active" : ""}`}>
         <div className="modal-background" onClick={closeModal}></div>
         <div className="modal-content">
-          {modalContent}
+          <div className="p-4">
+            {modalContent}
+          </div>
         </div>
         <button className="modal-close is-large" aria-label="close" onClick={closeModal}></button>
       </div>

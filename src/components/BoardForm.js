@@ -24,7 +24,7 @@ function BoardForm({adapter}){
   return (
     <div className="block">
       <div className="block">
-        <label class="label">Nom du tableau</label>
+        <label className="label">Nom du tableau</label>
         <input
           className="input"
           type="text"
