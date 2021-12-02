@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import ReactQuill from 'react-quill';
 
-function RichEditor({ loadedNote, adapter }) {
+function RichEditor({ loadedNote, adapter, boardId }) {
   let navigate = useNavigate();
 
   let saveNote = async () => {};
@@ -15,20 +15,20 @@ function RichEditor({ loadedNote, adapter }) {
 
   const deleteNote = async () => {
     if(window.confirm("Supprimer cette note ?")){
-      await adapter.delete(loadedNote.id);
-      navigate("/");
+      await adapter.deleteNote(loadedNote.id);
+      navigate(`/board/${loadedNote.board_id}`);
     }
   };
 
   if(typeof loadedNote === "undefined"){ // new note
     saveNote = async () => {
       if(quillContent){
-        await adapter.add({
+        await adapter.addNote(boardId, {
           content: quillContent,
           created_at: new Date(),
           edited_at: null
         });
-        navigate("/");
+        navigate(`/board/${boardId}`);
       }else{
         handleCancel();
       }
@@ -46,11 +46,11 @@ function RichEditor({ loadedNote, adapter }) {
 
     saveNote = async () => {
       if(quillContent){
-        await adapter.update(loadedNote.id, {
+        await adapter.updateNote(loadedNote.id, {
           content: quillContent,
           edited_at: new Date()
         });
-        navigate("/");
+        navigate(`/board/${loadedNote.board_id}`);
       }else{
         deleteNote();
       }

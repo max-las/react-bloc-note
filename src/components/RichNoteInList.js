@@ -26,7 +26,7 @@ function RichNoteInList({note}) {
   }
 
   return (
-    <div className="box NoteInList" onClick={() => {navigate("/edit/" + note.id)}}>
+    <div className="box InSortableList" onClick={() => {navigate("/edit/" + note.id)}}>
       <div className="block">
         <ReactQuill
           theme="snow"

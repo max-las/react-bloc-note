@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { ReactSortable } from "react-sortablejs";
 
 import RichNoteInList from "../components/RichNoteInList.js";
 
-function NoteList({ notesFromProps, adapter }){
+function NoteList({ notesFromProps, boardId, adapter }){
+  const navigate = useNavigate();
+
   let [notesFromState, setNotesFromState] = useState(notesFromProps);
 
   useEffect(() => {
@@ -16,7 +18,7 @@ function NoteList({ notesFromProps, adapter }){
     }
 
     // use the object to set each note order in the DB
-    adapter.modify((note) => {
+    adapter.modifyNote((note) => {
       note.order = idToOrder[note.id.toString()];
     });
   }, [notesFromState, adapter]);
@@ -25,10 +27,17 @@ function NoteList({ notesFromProps, adapter }){
     if(notesFromState){
       if(notesFromState.length > 0){
         if(window.confirm("Ceci effacera toutes vos notes. Êtes-vous sûr ?")){
-          adapter.clear();
+          adapter.clearBoard(boardId);
           setNotesFromState([]);
         }
       }
+    }
+  }
+
+  const deleteBoard = async () => {
+    if(window.confirm("Supprimer ce tabelau ?")){
+      await adapter.deleteBoard(boardId);
+      navigate("/");
     }
   }
 
@@ -54,7 +63,7 @@ function NoteList({ notesFromProps, adapter }){
   return (
     <div className="block">
       <div className="block">
-        <Link to="/new" className="button is-link is-outlined" style={{ marginRight: "10px", marginTop: "10px" }}>
+        <Link to={`/board/${boardId}/new`} className="button is-link is-outlined" style={{ marginRight: "10px", marginTop: "10px" }}>
           <span className="icon">
             <i className="fas fa-plus"></i>
           </span>
@@ -64,7 +73,13 @@ function NoteList({ notesFromProps, adapter }){
           <span className="icon">
             <i className="fas fa-broom"></i>
           </span>
-          <span>Tout effacer</span>
+          <span>Vider ce tableau</span>
+        </button>
+        <button className="button is-danger is-outlined" onClick={deleteBoard} style={{ marginRight: "10px", marginTop: "10px" }}>
+          <span className="icon">
+            <i class="far fa-trash-alt"></i>
+          </span>
+          <span>Supprimer ce tableau</span>
         </button>
       </div>
       {sortableList}

@@ -2,12 +2,15 @@ import React from "react";
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  Link
 } from "react-router-dom";
 import { useAsync } from "react-async";
 
 import Home from './pages/Home.js';
-import New from './pages/New.js';
+import Board from './pages/Board.js';
+import NewBoard from './pages/NewBoard.js';
+import NewNote from './pages/NewNote.js';
 import Edit from './pages/Edit.js';
 import IndexedDBAdapter from "./adapters/IndexedDBAdapter.js";
 import SessionAdapter from "./adapters/SessionAdapter.js";
@@ -45,12 +48,16 @@ function App() {
   if(adapter){
     return (
       <div className="container p-4">
-        <h1 className="title is-2" style={{fontFamily: "Gecko Lunch"}}>SuperNotes</h1>
-
         <BrowserRouter>
+          <h1 className="title is-2" style={{fontFamily: "Gecko Lunch"}}>
+            <Link to="/" className="titleLink">SuperNotes</Link>
+          </h1>
+          
           <Routes>
             <Route path="/" element={<Home adapter={adapter} />} />
-            <Route path="new" element={<New adapter={adapter} />} />
+            <Route path="board/new" element={<NewBoard adapter={adapter} />} />
+            <Route path="board/:id" element={<Board adapter={adapter} />} />
+            <Route path="board/:id/new" element={<NewNote adapter={adapter} />} />
             <Route path="edit/:id" element={<Edit adapter={adapter} />} />
           </Routes>
         </BrowserRouter>

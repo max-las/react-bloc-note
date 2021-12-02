@@ -1,23 +1,22 @@
 import { useAsync } from "react-async";
 
-import NoteList from "../components/NoteList.js";
+import BoardList from "../components/BoardList.js";
 
 function Home({adapter}) {
   document.title = "SuperNotes";
 
-  // notesFromDB will be undefined until notes are loaded from the DB
-  let {data: notesFromDB} = useAsync({
-    promiseFn: adapter.getAll
+  let {data: boardsFromDB} = useAsync({
+    promiseFn: adapter.getBoards
   });
 
-  if(notesFromDB){
+  if(boardsFromDB){
     return (
-      <NoteList notesFromProps={notesFromDB} adapter={adapter} />
+      <BoardList boardsFromProps={boardsFromDB} adapter={adapter} />
     );
   }else{
     return (
       <div className="block">
-        Chargement de la liste...
+        Chargement des tableaux...
       </div>
     )
   }
