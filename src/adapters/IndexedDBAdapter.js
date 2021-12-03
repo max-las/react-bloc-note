@@ -72,18 +72,23 @@ function IndexedDBAdapter(){
     let note = await db.richNotes.get(noteId);
     let previousBoard = await db.boards.get(note.board_id);
 
-    await db.boards.where({id: previousBoard.id}).modify((board) => {
-      let index = board.note_ids.indexOf(noteId);
-      board.note_ids.splice(index, 1);
+    await db.richNotes.where({board_id: boardId}).modify((note) => {
+      note.order += 1;
     });
 
-    await db.boards.where({id: boardId}).modify((board) => {
-      board.note_ids.push(noteId);
-    });
-
-    await db.richNotes.update(noteId, {
-      board_id: boardId
-    });
+    await Promise.all([
+      db.boards.where({id: previousBoard.id}).modify((board) => {
+        let index = board.note_ids.indexOf(noteId);
+        board.note_ids.splice(index, 1);
+      }),
+      db.boards.where({id: boardId}).modify((board) => {
+        board.note_ids.push(noteId);
+      }),
+      db.richNotes.update(noteId, {
+        board_id: boardId,
+        order: 0
+      })
+    ]);
 
     return true;
   }

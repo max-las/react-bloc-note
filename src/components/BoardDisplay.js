@@ -19,7 +19,10 @@ function BoardDisplay({ notesFromProps, boardId, adapter }){
 
     // use the object to set each note order in the DB
     adapter.modifyNote((note) => {
-      note.order = idToOrder[note.id.toString()];
+      const order = idToOrder[note.id.toString()];
+      if(order){
+        note.order = order;
+      }
     });
   }, [notesFromState, adapter]);
 

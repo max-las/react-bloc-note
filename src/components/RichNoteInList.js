@@ -26,8 +26,8 @@ function RichNoteInList({note}) {
   }
 
   return (
-    <div className="box InSortableList">
-      <div className="block" onClick={() => {navigate("/edit/" + note.id)}}>
+    <div className="box InSortableList" onClick={() => {navigate("/edit/" + note.id)}}>
+      <div className="block">
         <ReactQuill
           theme="snow"
           defaultValue={note.content}

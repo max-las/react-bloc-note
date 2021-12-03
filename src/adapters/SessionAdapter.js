@@ -148,7 +148,14 @@ function SessionAdapter(){
 
     boards[nextBoardIndex].note_ids.push(noteId);
 
+    notes.forEach((note) => {
+      if(note.board_id === boardId){
+        note.order += 1;
+      }
+    });
+
     notes[noteIndex].board_id = boardId;
+    notes[noteIndex].order = 0;
 
     saveSession();
     return true;
