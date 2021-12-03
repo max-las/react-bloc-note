@@ -2,10 +2,10 @@ function BoardInList({board, click}) {
   return (
     <div className="box InSortableList BoardInList" onClick={click}>
       <div className="block">
-        <strong>{board.name}</strong>
+        <strong style={{fontSize: "30px"}}>{board.name}</strong>
       </div>
       <div className="block content is-small">
-        <p className="has-text-grey-light">Contient {board.note_ids.length} notes</p>
+        <p className="has-text-white-ter">Contient {board.note_ids.length} notes</p>
       </div>
     </div>
   );

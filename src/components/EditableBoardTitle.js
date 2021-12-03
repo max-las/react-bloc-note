@@ -17,11 +17,11 @@ function EditableBoardTitle({board, adapter}){
 
   if(canEdit){
     return(
-      <input autoFocus className="input title is-4 has-text-primary" value={boardName} onChange={(event) => {setBoardName(event.target.value)}} onBlur={saveName} />
+      <input autoFocus className="input title is-3 has-text-link has-text-weight-bold" value={boardName} onChange={(event) => {setBoardName(event.target.value)}} onBlur={saveName} />
     )
   }else{
     return(
-      <h2 className="title is-4 has-text-primary" onClick={() => {setCanEdit(true)}}>{boardName}</h2>
+      <h2 className="title is-3 has-text-link has-text-weight-bold" onClick={() => {setCanEdit(true)}}>{boardName}</h2>
     )
   }
 }
